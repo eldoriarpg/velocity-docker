@@ -16,6 +16,10 @@ jobs:
         run: docker build . -t ghcr.io/${{ github.repository }}:${{ github.sha }}
       - name: Login to Registry
         run: echo ${{ secrets.GITHUB_TOKEN }} | docker login -u $ --password-stdin ghcr.io
+      - name: Tag & Push branch image
+        run: |
+          docker image tag ghcr.io/${{ github.repository }}:${{ github.sha }} ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          docker push ghcr.io/${{ github.repository }}:${{ github.ref_name }}
       - name: Tag & Push latest image
         if: github.ref_name == 'main'
         run: |
